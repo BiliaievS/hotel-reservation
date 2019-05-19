@@ -16,13 +16,13 @@ import java.util.List;
  * Created on 05/05/2019.
  */
 @Controller
-@RequestMapping(value = "/reservations")
+@RequestMapping(value = "/api")
 public class ReservationController {
 
     @Autowired
     private ReservationService reservationService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/reservations", method = RequestMethod.GET)
     public String getReservations(@RequestParam(value = "date", required = false) String dateStr, Model model) {
         List<RoomReservation> roomReservationByDate = reservationService.getRoomReservationByDate(dateStr);
         model.addAttribute("roomReservations", roomReservationByDate);

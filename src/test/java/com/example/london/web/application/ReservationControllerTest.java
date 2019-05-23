@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -16,11 +17,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.mockito.BDDMockito.given;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebMvcTest(ReservationController.class)
@@ -33,6 +36,7 @@ public class ReservationControllerTest {
 
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
+    @WithMockUser("USER")
     @Test
     public void getReservations() throws Exception{
         Date date = DATE_FORMAT.parse("2019-01-01");
@@ -48,6 +52,7 @@ public class ReservationControllerTest {
         mockReservationList.add(mockRoomReservation);
 
         given(reservationService.getRoomReservationByDate("2019-01-01")).willReturn(mockReservationList);
-        this.mockMvc.perform(get("/reservations?date=2019-01-01")).andExpect(status().isOk()).andExpect(content().string(containsString("Test, JUnit")));
+        this.mockMvc.perform(get("/reservations?date=2019-01-01")).andDo(print()).andExpect(status().isOk()).andExpect(content().string(containsString("Test, JUnit")));
     }
+
 }

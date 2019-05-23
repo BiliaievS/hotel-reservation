@@ -74,4 +74,10 @@ public class ReservationService {
         }
         return date;
     }
+
+    public List<Room> getAllRooms(){
+        List<Room> rooms = new ArrayList<>();
+        this.roomRepository.findAll().forEach(rooms::add);
+        return rooms;
+    }
 }
